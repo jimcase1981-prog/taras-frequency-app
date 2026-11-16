@@ -507,10 +507,10 @@
               <p class="ctl-label">Session length</p>
               <div class="chip-row" id="timerChips">
                 <button class="chip" data-min="10">10 min</button>
-                <button class="chip" data-min="20" aria-pressed="true">20 min</button>
+                <button class="chip" data-min="20" aria-pressed="false">20 min</button>
                 <button class="chip" data-min="30">30 min</button>
                 <button class="chip" data-min="60">60 min</button>
-                <button class="chip" data-min="0">No timer</button>
+                <button class="chip" data-min="0" aria-pressed="true">No timer — plays until you stop it</button>
               </div>
             </div>
 
@@ -1083,16 +1083,28 @@
     var ctx = null, master = null, nodes = null;
     var state = {
       session: null, playing: false, paused: false,
-      volume: 0.55, timerMin: 20,
+      volume: 0.55, timerMin: 0,
       elapsedBefore: 0, startedAt: 0,
       journeyStep: -1, displayFreq: 174, tickTimer: null, fading: false
     };
+    function resumeCtx() {
+      if (!ctx) return;
+      if (ctx.state === "suspended" || ctx.state === "interrupted") {
+        try { var p = ctx.resume(); if (p && p.catch) p.catch(function(){}); } catch (e) {}
+      }
+    }
     function ensureCtx() {
       if (!ctx) {
         ctx = new AC();
         master = ctx.createGain(); master.gain.value = 0; master.connect(ctx.destination);
+        /* Phones suspend/interrupt the audio context when the screen locks, a
+           call or notification comes in, or another app makes a sound. If a
+           session is meant to be playing, bring the sound straight back. */
+        ctx.onstatechange = function(){
+          if (state.playing && !state.paused) resumeCtx();
+        };
       }
-      if (ctx.state === "suspended") ctx.resume();
+      resumeCtx();
     }
     function applyVolume() {
       if (!master) return;
@@ -1116,6 +1128,11 @@
         else if (kind === "violet") { var d1=w-prev; var d2=d1-prevDiff; prevDiff=d1; prev=w; d[i]=d2*0.42; }
         else d[i]=w;
       }
+      /* Make the loop seamless: ease the whole buffer so its last sample meets
+         its first. Without this the loop clicks/thumps every few seconds where
+         the end jumps back to the start, which sounds like the sound cutting. */
+      var drift = d[len-1] - d[0];
+      if (drift) { for (i = 0; i < len; i++) d[i] -= drift * (i / (len - 1)); }
       return buf;
     }
     function makeCrackleBuffer() {
@@ -1383,6 +1400,62 @@
       if (!state.playing || state.paused) return state.elapsedBefore;
       return state.elapsedBefore + (performance.now() - state.startedAt);
     }
+
+    /* ================= Keeping the sound going =================
+       Phones cut web audio off when the screen sleeps or something interrupts
+       it. While a session plays we (1) hold a screen wake lock where the
+       browser allows it, (2) register as media playback so the lock screen
+       shows play/pause instead of the OS treating the page as idle, and
+       (3) watch for a suspended audio context and resume it. */
+    var wakeLock = null, wakeLockAsking = false;
+    function requestWakeLock() {
+      if (wakeLock || wakeLockAsking || !("wakeLock" in navigator)) return;
+      wakeLockAsking = true;
+      try {
+        navigator.wakeLock.request("screen").then(function(lock){
+          wakeLockAsking = false;
+          wakeLock = lock;
+          lock.addEventListener("release", function(){ if (wakeLock === lock) wakeLock = null; });
+        }).catch(function(){ wakeLockAsking = false; });
+      } catch (e) { wakeLockAsking = false; }
+    }
+    function releaseWakeLock() {
+      if (wakeLock) { try { wakeLock.release(); } catch (e) {} wakeLock = null; }
+    }
+    function updateMediaSession() {
+      if (!("mediaSession" in navigator)) return;
+      try {
+        var s = state.session;
+        if (typeof MediaMetadata !== "undefined" && s) {
+          navigator.mediaSession.metadata = new MediaMetadata({
+            title: s.title,
+            artist: "For Tara, with love, from Jimmy",
+            album: "Tara's Frequency App"
+          });
+        }
+        navigator.mediaSession.playbackState = (state.playing && !state.paused) ? "playing" : "paused";
+        navigator.mediaSession.setActionHandler("play", function(){
+          if (!state.session) loadSession(sessionById("sleep-journey"), false);
+          if (!state.playing) startPlayback(false);
+          else if (state.paused) resumePlayback();
+        });
+        navigator.mediaSession.setActionHandler("pause", function(){
+          if (state.playing && !state.paused) pausePlayback();
+        });
+        navigator.mediaSession.setActionHandler("stop", function(){
+          if (state.playing) stopPlayback(false);
+        });
+      } catch (e) {}
+    }
+    function recoverAudio() {
+      if (!state.playing || state.paused) return;
+      resumeCtx();
+      requestWakeLock();
+    }
+    document.addEventListener("visibilitychange", function(){ if (!document.hidden) recoverAudio(); });
+    window.addEventListener("focus", recoverAudio);
+    window.addEventListener("pageshow", recoverAudio);
+    setInterval(recoverAudio, 2000);
     function updateChips() {
       var s = state.session; if (!s) return;
       var ambient = (s.kind === "noise" || s.kind === "nature");
@@ -1470,6 +1543,21 @@
       startTick();
       updateChips();
       updateTimeUI();
+      requestWakeLock();
+      updateMediaSession();
+      if (typeof startSubliminals === "function") startSubliminals();
+    }
+    function resumePlayback() {
+      /* Restart the audio context itself, not just the volume — after the
+         phone has suspended it, raising the volume alone stays silent. */
+      ensureCtx();
+      state.paused = false; state.startedAt = performance.now();
+      applyVolume();
+      $("playIcon").style.display = "none"; $("pauseIcon").style.display = "";
+      $("playBtn").setAttribute("aria-label", "Pause");
+      updateTimeUI();
+      requestWakeLock();
+      updateMediaSession();
       if (typeof startSubliminals === "function") startSubliminals();
     }
     function pausePlayback() {
@@ -1479,11 +1567,14 @@
       if (master) master.gain.setTargetAtTime(0, ctx.currentTime, 0.1);
       $("playIcon").style.display = ""; $("pauseIcon").style.display = "none";
       $("playBtn").setAttribute("aria-label", "Play");
+      releaseWakeLock();
+      updateMediaSession();
       updateChips();
       updateTimeUI();
     }
     function stopPlayback(finished) {
       if (typeof stopSubliminals === "function") stopSubliminals();
+      releaseWakeLock();
       state.playing = false; state.paused = false; state.elapsedBefore = 0; state.journeyStep = state.session && state.session.journey ? 0 : state.journeyStep;
       if (ctx && master) master.gain.setTargetAtTime(0, ctx.currentTime, 0.15);
       setTimeout(teardownNodes, 400);
@@ -1492,6 +1583,7 @@
       $("playBtn").setAttribute("aria-label", "Play");
       $("timeBig").textContent = finished ? "Session complete" : "Ready";
       $("timeSmall").textContent = finished ? "Sleep well — or press play to go again" : "Choose a session below, or just press play";
+      updateMediaSession();
       updateChips();
       renderJourneyDots();
     }
@@ -1502,6 +1594,8 @@
     function tick() {
       if (!state.playing) return;
       var s = state.session; if (!s) return;
+      /* If the phone suspended the sound mid-session, bring it back. */
+      if (!state.paused) resumeCtx();
       var el = elapsedMs();
       if (s.journey) {
         var step = Math.min(8, Math.floor(el / journeyStepDur()));
@@ -1545,9 +1639,7 @@
     $("playBtn").addEventListener("click", function(){
       if (!state.session) loadSession(sessionById("sleep-journey"), false);
       if (!state.playing) startPlayback(false);
-      else if (state.paused) { state.paused = false; state.startedAt = performance.now(); applyVolume();
-        $("playIcon").style.display = "none"; $("pauseIcon").style.display = ""; $("playBtn").setAttribute("aria-label","Pause"); updateTimeUI();
-        if (typeof startSubliminals === "function") startSubliminals(); }
+      else if (state.paused) resumePlayback();
       else pausePlayback();
     });
     $("timerChips").addEventListener("click", function(e){
