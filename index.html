@@ -191,6 +191,8 @@
       .tint-sleep .swatch { background: var(--teal); } .tint-sleep .tag:first-child { background: var(--teal-soft); }
       .tint-body .swatch { background: var(--sage); } .tint-body .tag:first-child { background: var(--sage-soft); }
       .tint-mind .swatch { background: var(--gold); } .tint-mind .tag:first-child { background: var(--gold-soft); }
+      .tint-nature .swatch { background: #4a7c59; } .tint-nature .tag:first-child { background: var(--sage-soft); }
+      .tint-noise .swatch { background: #5d6d80; } .tint-noise .tag:first-child { background: var(--teal-soft); }
 
       /* ---------- Generator ---------- */
       .generator {
@@ -460,7 +462,7 @@
         <div class="ornament" aria-hidden="true">· ✦ ·</div>
         <h1>A quiet place,<br /><em>made for Tara</em></h1>
         <p class="dedication">For Tara, with love, from Jimmy</p>
-        <p class="lede">Healing tones, deep sleep, a calm body and a clear mind — every sound here is
+        <p class="lede">Healing tones, deep sleep, a calm body and a clear mind — plus gentle nature sounds and soothing noise colours — every sound here is
           <strong>played live, right on this page</strong>. Pick a session, press play, and settle in.
           Headphones make the gentle binaural beats work best.</p>
       </header>
@@ -482,7 +484,7 @@
             <div class="freq-row">
               <span class="freq-chip" id="chipTone">Tone <span>·</span> <b id="chipToneVal">174 Hz</b></span>
               <span class="freq-chip" id="chipBase">Foundation <span>·</span> <b id="chipBaseVal">432 Hz</b></span>
-              <span class="freq-chip">Binaural beat <span>·</span> <b id="chipBeatVal">4 Hz θ</b></span>
+              <span class="freq-chip" id="chipBeat">Binaural beat <span>·</span> <b id="chipBeatVal">4 Hz θ</b></span>
               <span class="freq-chip" id="chipBounce" style="display:none">Ear to ear <span>·</span> <b id="chipBounceVal">bouncing</b></span>
               <span class="freq-chip" id="chipSub" style="display:none">Subliminals <span>·</span> <b id="chipSubVal">on</b></span>
             </div>
@@ -542,6 +544,8 @@
         <a href="#sleep">Sleep &amp; Calm</a>
         <a href="#body">Body</a>
         <a href="#mind">Mind &amp; Spirit</a>
+        <a href="#nature">Nature Sounds</a>
+        <a href="#noise">Noise Colours</a>
         <a href="#affirmations">Affirmations</a>
         <a href="#generator">Make Your Own</a>
       </nav>
@@ -580,6 +584,24 @@
           <p class="cat-note">Focus, intuition, and the high tones — all the way up to 963.</p>
         </div>
         <div class="cards" id="cards-mind"></div>
+      </section>
+
+      <!-- ============ NATURE SOUNDS ============ -->
+      <section class="cat" id="nature">
+        <div class="cat-head">
+          <h2>Nature Sounds</h2>
+          <p class="cat-note">Rain, ocean, forest and fire — made live on this page, looping gently for as long as you listen.</p>
+        </div>
+        <div class="cards" id="cards-nature"></div>
+      </section>
+
+      <!-- ============ NOISE COLOURS ============ -->
+      <section class="cat" id="noise">
+        <div class="cat-head">
+          <h2>Noise Colours</h2>
+          <p class="cat-note">Every colour of noise — from bright white to deep, barely-there black — for sleep, focus, and blocking out the world.</p>
+        </div>
+        <div class="cards" id="cards-noise"></div>
       </section>
 
       <!-- ============ GENERATOR ============ -->
@@ -963,7 +985,57 @@
        tags:["741 Hz","Alpha beat","Expression"]},
       {id:"mind-focus", cat:"mind", tint:"mind", title:"Focus & Clarity", tone:440, beat:18,
        desc:"A clear tone with a brisk beta pulse — traditionally used for concentration, clear thinking, and getting things done.",
-       tags:["440 Hz","Beta beat","Focus"]}
+       tags:["440 Hz","Beta beat","Focus"]},
+      /* Nature Sounds */
+      {id:"nature-rain", cat:"nature", tint:"nature", kind:"nature", natureType:"rain", short:"Rain", swatchText:"Rn", tone:220, beat:0, hue:205,
+       desc:"A soft, steady rainfall — bright patter over a low, hushed wash. A favourite for sleep, reading, and quieting a busy room.",
+       tags:["Rain","Steady","Sleep & focus"]},
+      {id:"nature-ocean", cat:"nature", tint:"nature", kind:"nature", natureType:"ocean", short:"Ocean waves", swatchText:"Oc", tone:140, beat:0, hue:195,
+       desc:"Waves rolling in and easing back, over and over — a slow swell that rises and falls about every twelve seconds, like breathing with the sea.",
+       tags:["Ocean","Slow swell","Breathing pace"]},
+      {id:"nature-forest", cat:"nature", tint:"nature", kind:"nature", natureType:"forest", short:"Forest morning", swatchText:"Fo", tone:340, beat:0, hue:135,
+       desc:"A gentle breeze through the trees with soft birdsong now and then — a quiet morning in the woods, made live note by note.",
+       tags:["Forest","Birdsong","Breeze"]},
+      {id:"nature-stream", cat:"nature", tint:"nature", kind:"nature", natureType:"stream", short:"Mountain stream", swatchText:"St", tone:300, beat:0, hue:175,
+       desc:"Clear water tumbling over stones — bright, bubbling, and always moving. Lovely behind conversation, work, or rest.",
+       tags:["Stream","Bubbling","Fresh"]},
+      {id:"nature-thunder", cat:"nature", tint:"nature", kind:"nature", natureType:"thunder", short:"Thunderstorm", swatchText:"Th", tone:110, beat:0, hue:255,
+       desc:"Steady rain with a deep roll of thunder passing by every so often — the cosy kind of storm, heard from somewhere warm and dry.",
+       tags:["Rain","Distant thunder","Cosy storm"]},
+      {id:"nature-fire", cat:"nature", tint:"nature", kind:"nature", natureType:"fire", short:"Fireplace", swatchText:"Fi", tone:180, beat:0, hue:22,
+       desc:"A low, warm fire with soft pops and crackles — the sound of settling in for the evening, blanket optional but encouraged.",
+       tags:["Fireplace","Crackle","Warmth"]},
+      {id:"nature-crickets", cat:"nature", tint:"nature", kind:"nature", natureType:"crickets", short:"Night crickets", swatchText:"Cr", tone:520, beat:0, hue:95,
+       desc:"A warm summer night outside — crickets singing in slow pulses over the hush of night air. Made for drifting off.",
+       tags:["Crickets","Summer night","Sleep"]},
+      {id:"nature-wind", cat:"nature", tint:"nature", kind:"nature", natureType:"wind", short:"Wind in the pines", swatchText:"Wd", tone:160, beat:0, hue:160,
+       desc:"Soft wind moving through pine branches — it breathes in and out slowly, never quite the same twice. Calm, open, and airy.",
+       tags:["Wind","Pines","Airy"]},
+      /* Noise Colours */
+      {id:"noise-white", cat:"noise", tint:"noise", kind:"noise", noiseType:"white", short:"White", swatchText:"Wh", tone:620, beat:0, hue:210,
+       desc:"The classic — every pitch at equal strength, like a steady fan or soft TV static. The strongest masker: great for blocking out voices, traffic, and household noise.",
+       tags:["White noise","Full spectrum","Blocking"]},
+      {id:"noise-pink", cat:"noise", tint:"noise", kind:"noise", noiseType:"pink", short:"Pink", swatchText:"Pk", tone:330, beat:0, hue:330,
+       desc:"Softer and warmer than white — balanced so every octave sounds equally loud, like steady rain or rustling leaves. The most popular colour for sleep.",
+       tags:["Pink noise","Balanced","Sleep favourite"]},
+      {id:"noise-brown", cat:"noise", tint:"noise", kind:"noise", noiseType:"brown", short:"Brown", swatchText:"Br", tone:120, beat:0, hue:24,
+       desc:"Deep, low, and rumbling — like a strong waterfall or distant thunder that never stops. Also called red noise. Wonderful for deep sleep and calming a wired mind.",
+       tags:["Brown noise","Deep rumble","Deep sleep"]},
+      {id:"noise-blue", cat:"noise", tint:"noise", kind:"noise", noiseType:"blue", short:"Blue", swatchText:"Bl", tone:760, beat:0, hue:222,
+       desc:"Bright and hissy, with more energy in the high pitches — like the spray of a shower or water from a hose. Some people find it best for masking high, shrill sounds like tinnitus ringing.",
+       tags:["Blue noise","Bright hiss","High masking"]},
+      {id:"noise-violet", cat:"noise", tint:"noise", kind:"noise", noiseType:"violet", short:"Violet", swatchText:"Vi", tone:900, beat:0, hue:272,
+       desc:"The brightest colour of all — almost all high shimmer, kept gentle here. Also called purple noise. Traditionally used for masking high-pitched ringing; keep the volume low.",
+       tags:["Violet noise","Highest shimmer","Keep it soft"]},
+      {id:"noise-grey", cat:"noise", tint:"noise", kind:"noise", noiseType:"grey", short:"Grey", swatchText:"Gr", tone:440, beat:0, hue:0,
+       desc:"Shaped to sound equally loud to the human ear at every pitch — smooth, even, and neutral, with no part standing out. A calm, flat backdrop for focus or rest.",
+       tags:["Grey noise","Even to the ear","Neutral"]},
+      {id:"noise-green", cat:"noise", tint:"noise", kind:"noise", noiseType:"green", short:"Green", swatchText:"Gn", tone:260, beat:0, hue:130,
+       desc:"Centred on the middle pitches — the sound of nature's backdrop, like a forest or a meadow from far away. Warm and middle-weighted, easy to live with for hours.",
+       tags:["Green noise","Nature's middle","Easy listening"]},
+      {id:"noise-black", cat:"noise", tint:"noise", kind:"noise", noiseType:"black", short:"Black", swatchText:"Bk", tone:70, beat:0, hue:260,
+       desc:"Near-silence — the quietest colour, just a very deep, barely-there rumble under the hush. For light sleepers and anyone who wants almost nothing at all.",
+       tags:["Black noise","Near silence","Barely there"]}
     ];
     function sessionById(id) {
       for (var i = 0; i < SESSIONS.length; i++) if (SESSIONS[i].id === id) return SESSIONS[i];
@@ -982,7 +1054,7 @@
       var card = el("button", "card tint-" + (s.tint || "healing"));
       card.type = "button"; card.dataset.sessionId = s.id;
       var hue = (s.hue != null) ? s.hue : hueForFreq(s.tone);
-      var sw = el("div", "swatch", s.journey ? "9" : String(Math.round(s.tone)));
+      var sw = el("div", "swatch", s.swatchText ? s.swatchText : (s.journey ? "9" : String(Math.round(s.tone))));
       sw.style.background = "hsl(" + hue + ",52%,42%)";
       card.appendChild(sw);
       card.appendChild(el("h3", null, s.title));
@@ -997,7 +1069,7 @@
       });
       return card;
     }
-    ["healing","sleep","body","mind"].forEach(function(cat){
+    ["healing","sleep","body","mind","nature","noise"].forEach(function(cat){
       var box = document.getElementById("cards-" + cat);
       SESSIONS.filter(function(s){ return s.cat === cat; }).forEach(function(s){ box.appendChild(makeCard(s)); });
     });
@@ -1027,11 +1099,157 @@
       var duck = (aff.voiceOn && aff.speaking) ? 0.45 : 1;
       master.gain.setTargetAtTime(state.volume * 0.9 * duck, ctx.currentTime, 0.15);
     }
+    function makeNoiseBuffer(kind) {
+      var len = ctx.sampleRate * 4;
+      var buf = ctx.createBuffer(1, len, ctx.sampleRate);
+      var d = buf.getChannelData(0);
+      var last = 0, b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0, prev=0, prevDiff=0, i;
+      for (i = 0; i < len; i++) {
+        var w = Math.random()*2-1;
+        if (kind === "brown") { last = (last + 0.02*w)/1.02; d[i] = last*3.2; }
+        else if (kind === "pink") {
+          b0=0.99886*b0+w*0.0555179; b1=0.99332*b1+w*0.0750759; b2=0.96900*b2+w*0.1538520;
+          b3=0.86650*b3+w*0.3104856; b4=0.55000*b4+w*0.5329522; b5=-0.7616*b5-w*0.0168980;
+          var pk=b0+b1+b2+b3+b4+b5+b6+w*0.5362; b6=w*0.115926; d[i]=pk*0.11;
+        }
+        else if (kind === "blue") { var df=w-prev; prev=w; d[i]=df*0.6; }
+        else if (kind === "violet") { var d1=w-prev; var d2=d1-prevDiff; prevDiff=d1; prev=w; d[i]=d2*0.42; }
+        else d[i]=w;
+      }
+      return buf;
+    }
+    function makeCrackleBuffer() {
+      var len = ctx.sampleRate * 3, buf = ctx.createBuffer(1, len, ctx.sampleRate), d = buf.getChannelData(0), i, j;
+      for (i = 0; i < len; i++) {
+        if (Math.random() < 0.0004) {
+          var amp = Math.random()*0.85+0.25, dec = Math.floor(Math.random()*280)+36;
+          for (j = 0; j < dec && i+j < len; j++) d[i+j] += (Math.random()*2-1)*amp*(1-j/dec);
+          i += dec;
+        }
+      }
+      return buf;
+    }
+    function noiseSrc(kind) {
+      var src = ctx.createBufferSource(); src.buffer = makeNoiseBuffer(kind); src.loop = true;
+      nodes.oscs.push(src); return src;
+    }
+    function addLfo(freq, depth, param) {
+      var o = ctx.createOscillator(); o.type = "sine"; o.frequency.value = freq;
+      var g = ctx.createGain(); g.gain.value = depth;
+      o.connect(g); g.connect(param); o.start(ctx.currentTime);
+      nodes.oscs.push(o); nodes.extra.push(g); return o;
+    }
+    function chainNoise(kind, filters, gainVal, dest) {
+      var src = noiseSrc(kind);
+      var g = ctx.createGain(); g.gain.value = gainVal; nodes.extra.push(g);
+      var node = src;
+      (filters || []).forEach(function(fc){
+        var f = ctx.createBiquadFilter(); f.type = fc[0]; f.frequency.value = fc[1]; if (fc[2]) f.Q.value = fc[2];
+        node.connect(f); node = f; nodes.extra.push(f);
+      });
+      node.connect(g); g.connect(dest); src.start(ctx.currentTime);
+      return g;
+    }
+    function chirp(dest, baseFreq, sweepTo, dur, vol, when) {
+      try {
+        var t0 = ctx.currentTime + (when || 0);
+        var o = ctx.createOscillator(); o.type = "sine";
+        o.frequency.setValueAtTime(baseFreq, t0);
+        o.frequency.exponentialRampToValueAtTime(sweepTo, t0 + dur);
+        var g = ctx.createGain();
+        g.gain.setValueAtTime(0, t0);
+        g.gain.linearRampToValueAtTime(vol, t0 + dur*0.3);
+        g.gain.linearRampToValueAtTime(0, t0 + dur);
+        o.connect(g); g.connect(dest); o.start(t0); o.stop(t0 + dur + 0.05);
+      } catch(e){}
+    }
+    function buildAmbientNodes(s) {
+      var bus = ctx.createGain(); bus.gain.value = 0.85; bus.connect(master); nodes.noiseBus = bus;
+      var type = s.kind === "noise" ? s.noiseType : s.natureType;
+      if (s.kind === "noise") {
+        if (type === "white") chainNoise("white", [], 0.34, bus);
+        else if (type === "pink") chainNoise("pink", [], 0.55, bus);
+        else if (type === "brown") chainNoise("brown", [], 0.85, bus);
+        else if (type === "blue") chainNoise("blue", [["lowpass",9000]], 0.32, bus);
+        else if (type === "violet") chainNoise("violet", [["highpass",1800],["lowpass",14000]], 0.20, bus);
+        else if (type === "grey") chainNoise("pink", [["lowshelf",420,-4],["highshelf",3800,3]], 0.55, bus);
+        else if (type === "green") chainNoise("pink", [["bandpass",520,0.45],["lowpass",1500]], 0.75, bus);
+        else if (type === "black") chainNoise("brown", [["lowpass",110]], 0.55, bus);
+        else chainNoise("white", [], 0.34, bus);
+        return;
+      }
+      /* nature */
+      if (type === "rain") {
+        chainNoise("white", [["highpass",480],["lowpass",2300]], 0.30, bus);
+        chainNoise("pink", [["lowpass",760]], 0.22, bus);
+      } else if (type === "ocean") {
+        var og = ctx.createGain(); og.gain.value = 0.62; og.connect(bus); nodes.extra.push(og);
+        var of = ctx.createBiquadFilter(); of.type = "lowpass"; of.frequency.value = 480; of.connect(og); nodes.extra.push(of);
+        var osrc = noiseSrc("pink"); osrc.connect(of); osrc.start(ctx.currentTime);
+        addLfo(0.085, 230, of.frequency); addLfo(0.085, 0.20, og.gain);
+      } else if (type === "wind") {
+        var wg = ctx.createGain(); wg.gain.value = 0.5; wg.connect(bus); nodes.extra.push(wg);
+        var wf = ctx.createBiquadFilter(); wf.type = "bandpass"; wf.frequency.value = 420; wf.Q.value = 0.7; wf.connect(wg); nodes.extra.push(wf);
+        var wsrc = noiseSrc("pink"); wsrc.connect(wf); wsrc.start(ctx.currentTime);
+        addLfo(0.06, 180, wf.frequency); addLfo(0.045, 0.16, wg.gain);
+      } else if (type === "forest") {
+        chainNoise("pink", [["bandpass",420,0.7],["lowpass",900]], 0.16, bus);
+        var bird = function(){
+          var n = 2 + Math.floor(Math.random()*3);
+          for (var k = 0; k < n; k++) chirp(bus, 2300+Math.random()*700, 3000+Math.random()*900, 0.16, 0.055, k*0.22);
+          nodes.timers.push(setTimeout(bird, 3800 + Math.random()*5200));
+        };
+        nodes.timers.push(setTimeout(bird, 1200));
+      } else if (type === "stream") {
+        var sg = ctx.createGain(); sg.gain.value = 0.42; sg.connect(bus); nodes.extra.push(sg);
+        var sf = ctx.createBiquadFilter(); sf.type = "bandpass"; sf.frequency.value = 880; sf.Q.value = 0.9; sf.connect(sg); nodes.extra.push(sf);
+        var ssrc = noiseSrc("white"); ssrc.connect(sf); ssrc.start(ctx.currentTime);
+        addLfo(1.7, 150, sf.frequency); addLfo(0.6, 60, sf.frequency);
+        chainNoise("pink", [["lowpass",500]], 0.14, bus);
+      } else if (type === "waterfall") {
+        chainNoise("white", [["lowpass",1150]], 0.30, bus);
+        chainNoise("pink", [["lowpass",700]], 0.30, bus);
+      } else if (type === "thunder") {
+        chainNoise("white", [["highpass",480],["lowpass",2200]], 0.24, bus);
+        chainNoise("pink", [["lowpass",700]], 0.18, bus);
+        var rumble = function(){
+          try {
+            var t0 = ctx.currentTime;
+            var rs = ctx.createBufferSource(); rs.buffer = makeNoiseBuffer("brown"); rs.loop = true;
+            var rf = ctx.createBiquadFilter(); rf.type = "lowpass"; rf.frequency.value = 130;
+            var rg = ctx.createGain();
+            rg.gain.setValueAtTime(0, t0);
+            rg.gain.linearRampToValueAtTime(0.85, t0+1.1);
+            rg.gain.exponentialRampToValueAtTime(0.02, t0+5.5);
+            rs.connect(rf); rf.connect(rg); rg.connect(bus); rs.start(t0); rs.stop(t0+6);
+          } catch(e){}
+          nodes.timers.push(setTimeout(rumble, 13000 + Math.random()*13000));
+        };
+        nodes.timers.push(setTimeout(rumble, 4500));
+      } else if (type === "fire") {
+        chainNoise("brown", [["lowpass",420]], 0.55, bus);
+        var cs = ctx.createBufferSource(); cs.buffer = makeCrackleBuffer(); cs.loop = true;
+        var cf = ctx.createBiquadFilter(); cf.type = "highpass"; cf.frequency.value = 900;
+        var cg = ctx.createGain(); cg.gain.value = 0.8;
+        cs.connect(cf); cf.connect(cg); cg.connect(bus); cs.start(ctx.currentTime);
+        nodes.oscs.push(cs); nodes.extra.push(cf, cg);
+      } else if (type === "crickets") {
+        chainNoise("pink", [["lowpass",480]], 0.07, bus);
+        var pulse = function(){
+          for (var k = 0; k < 5; k++) chirp(bus, 4200, 4300, 0.07, 0.045, k*0.11);
+          nodes.timers.push(setTimeout(pulse, 2100 + Math.random()*900));
+        };
+        nodes.timers.push(setTimeout(pulse, 700));
+      } else {
+        chainNoise("pink", [], 0.4, bus);
+      }
+    }
     function buildNodes() {
       teardownNodes();
       var s = state.session; if (!s) return;
       var t = ctx.currentTime;
-      nodes = { oscs: [] };
+      nodes = { oscs: [], timers: [], extra: [] };
+      if (s.kind === "noise" || s.kind === "nature") { buildAmbientNodes(s); return; }
       var toneBus = ctx.createGain(); toneBus.gain.value = 0.30; nodes.toneBus = toneBus;
       if (s.bounce) {
         var bouncePan = ctx.createStereoPanner(); bouncePan.pan.value = 0;
@@ -1091,6 +1309,9 @@
     function teardownNodes() {
       if (!nodes) return;
       var t = ctx ? ctx.currentTime : 0;
+      if (nodes.timers) nodes.timers.forEach(function(id){ clearTimeout(id); });
+      if (nodes.extra) nodes.extra.forEach(function(n){ try { n.disconnect(); } catch(e){} });
+      if (nodes.noiseBus) try { nodes.noiseBus.disconnect(); } catch(e){}
       nodes.oscs.forEach(function(o){ try { o.stop(t + 0.1); } catch(e){} try { o.disconnect(); } catch(e){} });
       if (nodes.bounceGain) try { nodes.bounceGain.disconnect(); } catch(e){}
       if (nodes.bouncePan) try { nodes.bouncePan.disconnect(); } catch(e){}
@@ -1164,6 +1385,19 @@
     }
     function updateChips() {
       var s = state.session; if (!s) return;
+      var ambient = (s.kind === "noise" || s.kind === "nature");
+      $("chipBase").style.display = ambient ? "none" : "";
+      $("chipBeat").style.display = ambient ? "none" : "";
+      if (ambient) {
+        $("chipTone").childNodes[0].textContent = (s.kind === "noise" ? "Noise " : "Sound ");
+        $("chipToneVal").textContent = s.kind === "noise" ? (s.short + " noise") : s.short;
+        var bc = $("chipBounce"); if (bc) bc.style.display = "none";
+        $("stageLabel").textContent = s.kind === "noise"
+          ? "White · Pink · Brown · Blue · Violet · Grey · Green · Black"
+          : "Rain · Ocean · Forest · Stream · Storm · Fire · Crickets · Wind";
+        return;
+      }
+      $("chipTone").childNodes[0].textContent = "Tone ";
       var f = currentToneFreq();
       $("chipToneVal").textContent = (s.journey ? Math.round(f) + " Hz · step " + (state.journeyStep+1) + " of 9" : (Math.round(f*10)/10) + " Hz");
       $("chipBaseVal").textContent = s.base ? s.base + " Hz" : "none";
@@ -1303,8 +1537,9 @@
       }
       var s = state.session;
       $("timeSmall").textContent = state.paused ? "Paused" :
-        (s.journey ? "Journey · tone " + (state.journeyStep+1) + " of 9 · " + Math.round(currentToneFreq()) + " Hz"
-                   : Math.round(currentToneFreq()*10)/10 + " Hz · " + beatName(s.beat || 0));
+        ((s.kind === "noise" || s.kind === "nature") ? s.title + " · looping live"
+        : (s.journey ? "Journey · tone " + (state.journeyStep+1) + " of 9 · " + Math.round(currentToneFreq()) + " Hz"
+                   : Math.round(currentToneFreq()*10)/10 + " Hz · " + beatName(s.beat || 0)));
     }
 
     $("playBtn").addEventListener("click", function(){
@@ -1431,7 +1666,7 @@
       g.fillStyle = "#f9efdf";
       g.font = "600 " + Math.max(11, Math.min(W,H) * 0.038) + "px 'Public Sans', sans-serif";
       g.textAlign = "center"; g.textBaseline = "middle";
-      g.fillText(Math.round(f) + " Hz", cx, cy);
+      g.fillText((s && (s.kind === "noise" || s.kind === "nature")) ? s.short : (Math.round(f) + " Hz"), cx, cy);
       g.shadowBlur = 0;
       requestAnimationFrame(drawRings);
     }
